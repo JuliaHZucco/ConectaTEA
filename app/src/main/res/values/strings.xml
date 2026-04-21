@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Conecta TEA</string>
+
+    <string name="main_title">ConectaTEA</string>
+    <string name="main_subtitle">Comunicação visual, pictogramas e organização escolar em um ambiente acolhedor, seguro e pensado para cada criança.</string>
+
+    <string name="login_title">Entrar</string>
+    <string name="login_subtitle">Acesse sua conta para continuar.</string>
+
+    <string name="register_title">Criar conta</string>
+    <string name="register_subtitle">Cadastre-se e escolha apenas um perfil.</string>
+
+    <string name="hint_name">Nome completo</string>
+    <string name="hint_email">E-mail</string>
+    <string name="hint_password">Senha</string>
+    <string name="hint_confirm_password">Confirmar senha</string>
+
+    <string name="profile_type">Tipo de perfil</string>
+    <string name="profile_parent">Responsável</string>
+    <string name="profile_teacher">Professor(a)</string>
+
+    <string name="btn_login">Entrar</string>
+    <string name="btn_create_account">Criar conta</string>
+    <string name="btn_register">Cadastrar</string>
+    <string name="btn_back">Voltar</string>
+    <string name="btn_google">Entrar com Google</string>
+</resources>

@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg_screen_lilac"
+    android:fillViewport="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="24dp"
+        android:gravity="center">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_card"
+            android:orientation="vertical"
+            android:padding="28dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Área do responsável"
+                android:textColor="@color/title_purple"
+                android:textSize="28sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="Gerencie crianças, tabelas de pictogramas e permissões de acesso."
+                android:textColor="@color/text_body"
+                android:textSize="15sp" />
+
+            <Button
+                android:id="@+id/btnRegisteredChildren"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:layout_marginTop="24dp"
+                android:background="@drawable/bg_button_primary"
+                android:text="Crianças cadastradas"
+                android:textAllCaps="false"
+                android:textColor="@color/text_white"
+                android:textStyle="bold" />
+
+            <Button
+                android:id="@+id/btnAddChild"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:layout_marginTop="12dp"
+                android:background="@drawable/bg_button_secondary"
+                android:text="Cadastrar criança"
+                android:textAllCaps="false"
+                android:textColor="@color/text_white"
+                android:textStyle="bold" />
+
+            <Button
+                android:id="@+id/btnAccessRequests"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:layout_marginTop="12dp"
+                android:background="@drawable/bg_button_tertiary"
+                android:text="Solicitações de acesso"
+                android:textAllCaps="false"
+                android:textColor="@color/text_white"
+                android:textStyle="bold" />
+
+            <Button
+                android:id="@+id/btnBack"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:layout_marginTop="12dp"
+                android:background="@drawable/bg_button_tertiary"
+                android:text="Voltar"
+                android:textAllCaps="false"
+                android:textColor="@color/text_white"
+                android:textStyle="bold" />
+        </LinearLayout>
+    </LinearLayout>
+</ScrollView>
