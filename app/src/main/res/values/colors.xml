@@ -13,9 +13,12 @@
     <color name="input_bg">#F3EFF8</color>
     <color name="input_border">#E1D8F1</color>
 
+    <color name="text_white">#FFFFFF</color>
     <color name="text_title">#2F2A35</color>
     <color name="text_body">#5F5868</color>
-    <color name="text_white">#FFFFFF</color>
+    <color name="text_menu">#4F4858</color>
+    <color name="text_menu_selected">#6E56CF</color>
+    <color name="menu_selected_bg">#F1ECFF</color>
 
     <color name="title_purple">#6E56CF</color>
     <color name="title_pink">#D96B9A</color>

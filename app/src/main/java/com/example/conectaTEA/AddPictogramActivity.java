@@ -5,22 +5,35 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import androidx.appcompat.app.AppCompatActivity;
+import com.google.firebase.firestore.FirebaseFirestore;
 
-public class AddPictogramActivity extends AppCompatActivity {
+import java.util.HashMap;
+import java.util.Map;
+
+public class AddPictogramActivity extends BaseActivity {
 
     private EditText etPictogramName, etPictogramLink;
-    private Button btnSavePictogram, btnBack;
+    private Button btnSavePictogram;
+    private String tableId, passedImageUrl;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_pictogram);
 
+        setupBackButton();
+
         etPictogramName = findViewById(R.id.etPictogramName);
         etPictogramLink = findViewById(R.id.etPictogramLink);
         btnSavePictogram = findViewById(R.id.btnSavePictogram);
-        btnBack = findViewById(R.id.btnBack);
+        
+        tableId = getIntent().getStringExtra("TABLE_ID");
+        passedImageUrl = getIntent().getStringExtra("IMAGE_URL");
+
+        if (passedImageUrl != null) {
+            etPictogramLink.setText(passedImageUrl);
+            etPictogramLink.setEnabled(false); // Link vindo do Storage não deve ser editado manualmente
+        }
 
         btnSavePictogram.setOnClickListener(v -> {
             String name = etPictogramName.getText().toString().trim();
@@ -31,10 +44,30 @@ public class AddPictogramActivity extends AppCompatActivity {
                 return;
             }
 
-            Toast.makeText(this, "Pictograma adicionado: " + name, Toast.LENGTH_SHORT).show();
-            finish();
-        });
+            if (tableId == null) {
+                Toast.makeText(this, "Erro: Tabela não identificada.", Toast.LENGTH_SHORT).show();
+                return;
+            }
 
-        btnBack.setOnClickListener(v -> finish());
+            btnSavePictogram.setEnabled(false);
+            btnSavePictogram.setText("Adicionando...");
+
+            Map<String, Object> pictogram = new HashMap<>();
+            pictogram.put("name", name);
+            pictogram.put("imageUrl", link);
+            pictogram.put("tableId", tableId);
+
+            FirebaseFirestore.getInstance().collection("pictograms")
+                    .add(pictogram)
+                    .addOnSuccessListener(ref -> {
+                        Toast.makeText(this, "Pictograma adicionado!", Toast.LENGTH_SHORT).show();
+                        finish();
+                    })
+                    .addOnFailureListener(e -> {
+                        btnSavePictogram.setEnabled(true);
+                        btnSavePictogram.setText("Salvar pictograma");
+                        Toast.makeText(this, translateError(e), Toast.LENGTH_SHORT).show();
+                    });
+        });
     }
 }

@@ -1,62 +1,66 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@drawable/bg_screen_blue"
-    android:fillViewport="true">
+    android:layout_height="match_parent">
 
-    <LinearLayout
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:padding="24dp">
+        android:background="@drawable/bg_screen_pink"
+        android:fillViewport="true">
 
-        <TextView
-            android:id="@+id/tvChildName"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@color/title_purple"
-            android:textSize="26sp"
-            android:textStyle="bold" />
-
-        <Button
-            android:id="@+id/btnMorningTable"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="56dp"
-            android:layout_marginTop="20dp"
-            android:background="@drawable/bg_button_primary"
-            android:text="Rotina da manhã"
-            android:textAllCaps="false"
-            android:textColor="@color/text_white" />
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:padding="24dp">
 
-        <Button
-            android:id="@+id/btnSchoolTable"
-            android:layout_width="match_parent"
-            android:layout_height="56dp"
-            android:layout_marginTop="12dp"
-            android:background="@drawable/bg_button_secondary"
-            android:text="Escola"
-            android:textAllCaps="false"
-            android:textColor="@color/text_white" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_card"
+                android:orientation="vertical"
+                android:padding="28dp">
 
-        <Button
-            android:id="@+id/btnNewTable"
-            android:layout_width="match_parent"
-            android:layout_height="56dp"
-            android:layout_marginTop="12dp"
-            android:background="@drawable/bg_button_tertiary"
-            android:text="Nova tabela de pictogramas"
-            android:textAllCaps="false"
-            android:textColor="@color/text_white" />
+                <TextView
+                    android:id="@+id/tvChildName"
+                    style="@style/TextTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="26sp" />
 
-        <Button
-            android:id="@+id/btnBack"
-            android:layout_width="match_parent"
-            android:layout_height="56dp"
-            android:layout_marginTop="18dp"
-            android:background="@drawable/bg_button_tertiary"
-            android:text="Voltar"
-            android:textAllCaps="false"
-            android:textColor="@color/text_white" />
-    </LinearLayout>
-</ScrollView>
+                <LinearLayout
+                    android:id="@+id/containerTables"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginTop="8dp" />
+
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fabAddTable"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="24dp"
+        android:src="@android:drawable/ic_input_add"
+        app:backgroundTint="@color/title_purple"
+        app:tint="@color/text_white" />
+
+    <ImageView
+        android:id="@+id/btnBack"
+        android:layout_width="56dp"
+        android:layout_height="56dp"
+        android:layout_gravity="bottom|start"
+        android:layout_margin="20dp"
+        android:background="@drawable/bg_back_circle"
+        android:src="@android:drawable/ic_media_previous"
+        android:padding="12dp"
+        app:tint="@color/title_purple" />
+
+</FrameLayout>

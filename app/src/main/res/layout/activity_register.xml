@@ -1,140 +1,153 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:fillViewport="true"
-    android:background="@drawable/bg_screen_pink">
+    android:layout_height="match_parent">
 
-    <LinearLayout
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:gravity="center"
-        android:padding="24dp">
+        android:fillViewport="true"
+        android:background="@drawable/bg_screen_pink">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:orientation="vertical"
-            android:background="@drawable/bg_card"
-            android:padding="28dp"
-            android:elevation="6dp">
+            android:gravity="center"
+            android:padding="24dp">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/register_title"
-                android:textSize="28sp"
-                android:textStyle="bold"
-                android:textColor="@color/text_title" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:text="@string/register_subtitle"
-                android:textSize="14sp"
-                android:textColor="@color/text_body" />
-
-            <EditText
-                android:id="@+id/etName"
-                android:layout_width="match_parent"
-                android:layout_height="56dp"
-                android:layout_marginTop="20dp"
-                android:background="@drawable/bg_input"
-                android:hint="@string/hint_name"
-                android:paddingHorizontal="16dp"
-                android:textColor="@color/text_title"
-                android:textColorHint="@color/text_body" />
-
-            <EditText
-                android:id="@+id/etEmail"
-                android:layout_width="match_parent"
-                android:layout_height="56dp"
-                android:layout_marginTop="12dp"
-                android:background="@drawable/bg_input"
-                android:hint="@string/hint_email"
-                android:inputType="textEmailAddress"
-                android:paddingHorizontal="16dp"
-                android:textColor="@color/text_title"
-                android:textColorHint="@color/text_body" />
-
-            <EditText
-                android:id="@+id/etPassword"
-                android:layout_width="match_parent"
-                android:layout_height="56dp"
-                android:layout_marginTop="12dp"
-                android:background="@drawable/bg_input"
-                android:hint="@string/hint_password"
-                android:inputType="textPassword"
-                android:paddingHorizontal="16dp"
-                android:textColor="@color/text_title"
-                android:textColorHint="@color/text_body" />
-
-            <EditText
-                android:id="@+id/etConfirmPassword"
-                android:layout_width="match_parent"
-                android:layout_height="56dp"
-                android:layout_marginTop="12dp"
-                android:background="@drawable/bg_input"
-                android:hint="@string/hint_confirm_password"
-                android:inputType="textPassword"
-                android:paddingHorizontal="16dp"
-                android:textColor="@color/text_title"
-                android:textColorHint="@color/text_body" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="18dp"
-                android:text="@string/profile_type"
-                android:textStyle="bold"
-                android:textColor="@color/text_title" />
-
-            <RadioGroup
-                android:id="@+id/rgProfile"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp">
+                android:orientation="vertical"
+                android:background="@drawable/bg_card"
+                android:padding="28dp"
+                android:elevation="6dp">
 
-                <RadioButton
-                    android:id="@+id/rbParent"
+                <TextView
+                    style="@style/TextTitle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/profile_parent"
-                    android:checked="true"
-                    android:textColor="@color/text_title" />
+                    android:text="@string/register_title"
+                    android:textSize="28sp" />
 
-                <RadioButton
-                    android:id="@+id/rbTeacher"
+                <TextView
+                    style="@style/TextBody"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/profile_teacher"
-                    android:textColor="@color/text_title" />
-            </RadioGroup>
+                    android:layout_marginTop="8dp"
+                    android:text="@string/register_subtitle"
+                    android:textSize="14sp" />
 
-            <Button
-                android:id="@+id/btnRegister"
-                android:layout_width="match_parent"
-                android:layout_height="56dp"
-                android:layout_marginTop="22dp"
-                android:background="@drawable/bg_button_secondary"
-                android:text="@string/btn_register"
-                android:textAllCaps="false"
-                android:textColor="@color/text_white"
-                android:textStyle="bold" />
+                <EditText
+                    android:id="@+id/etName"
+                    android:layout_width="match_parent"
+                    android:layout_height="56dp"
+                    android:layout_marginTop="20dp"
+                    android:background="@drawable/bg_input"
+                    android:hint="@string/hint_name"
+                    android:fontFamily="@font/raleway_regular"
+                    android:textColor="@color/text_title"
+                    android:textColorHint="@color/text_body"
+                    android:paddingHorizontal="16dp" />
 
-            <Button
-                android:id="@+id/btnBack"
-                android:layout_width="match_parent"
-                android:layout_height="56dp"
-                android:layout_marginTop="12dp"
-                android:background="@drawable/bg_button_tertiary"
-                android:text="@string/btn_back"
-                android:textAllCaps="false"
-                android:textColor="@color/text_white"
-                android:textStyle="bold" />
+                <EditText
+                    android:id="@+id/etEmail"
+                    android:layout_width="match_parent"
+                    android:layout_height="56dp"
+                    android:layout_marginTop="12dp"
+                    android:background="@drawable/bg_input"
+                    android:hint="@string/hint_email"
+                    android:inputType="textEmailAddress"
+                    android:fontFamily="@font/raleway_regular"
+                    android:textColor="@color/text_title"
+                    android:textColorHint="@color/text_body"
+                    android:paddingHorizontal="16dp" />
 
+                <EditText
+                    android:id="@+id/etPassword"
+                    android:layout_width="match_parent"
+                    android:layout_height="56dp"
+                    android:layout_marginTop="12dp"
+                    android:background="@drawable/bg_input"
+                    android:hint="@string/hint_password"
+                    android:inputType="textPassword"
+                    android:fontFamily="@font/raleway_regular"
+                    android:textColor="@color/text_title"
+                    android:textColorHint="@color/text_body"
+                    android:paddingHorizontal="16dp" />
+
+                <EditText
+                    android:id="@+id/etConfirmPassword"
+                    android:layout_width="match_parent"
+                    android:layout_height="56dp"
+                    android:layout_marginTop="12dp"
+                    android:background="@drawable/bg_input"
+                    android:hint="@string/hint_confirm_password"
+                    android:inputType="textPassword"
+                    android:fontFamily="@font/raleway_regular"
+                    android:textColor="@color/text_title"
+                    android:textColorHint="@color/text_body"
+                    android:paddingHorizontal="16dp" />
+
+                <TextView
+                    style="@style/TextBody"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="18dp"
+                    android:text="@string/profile_type"
+                    android:textStyle="bold" />
+
+                <RadioGroup
+                    android:id="@+id/rgProfile"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp">
+
+                    <RadioButton
+                        android:id="@+id/rbParent"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/profile_parent"
+                        android:checked="true"
+                        android:buttonTint="@color/title_purple"
+                        android:textColor="@color/text_title"
+                        android:fontFamily="@font/raleway_medium" />
+
+                    <RadioButton
+                        android:id="@+id/rbTeacher"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/profile_teacher"
+                        android:textColor="@color/text_title"
+                        android:buttonTint="@color/title_purple"
+                        android:fontFamily="@font/raleway_medium" />
+                </RadioGroup>
+
+                <Button
+                    style="@style/ButtonText"
+                    android:id="@+id/btnRegister"
+                    android:layout_width="match_parent"
+                    android:layout_height="56dp"
+                    android:layout_marginTop="22dp"
+                    android:background="@drawable/bg_button_secondary"
+                    android:text="@string/btn_register"
+                    android:textColor="@color/text_white" />
+
+            </LinearLayout>
         </LinearLayout>
-    </LinearLayout>
-</ScrollView>
+    </ScrollView>
+
+    <ImageView
+        android:id="@+id/btnBack"
+        android:layout_width="56dp"
+        android:layout_height="56dp"
+        android:layout_gravity="bottom|start"
+        android:layout_margin="20dp"
+        android:background="@drawable/bg_back_circle"
+        android:src="@android:drawable/ic_media_previous"
+        android:padding="12dp"
+        app:tint="@color/title_purple" />
+
+</FrameLayout>

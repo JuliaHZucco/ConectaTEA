@@ -26,6 +26,13 @@
         <activity android:name=".ChildrenListActivity" />
         <activity android:name=".AddChildActivity" />
         <activity android:name=".AddPictogramActivity" />
+        <activity android:name=".ProfileActivity" />
+        <activity android:name=".WelcomeActivity" />
+        <activity android:name=".PictogramGridActivity" />
+        <activity android:name=".PictogramDetailActivity" />
+        <activity android:name=".TeacherRequestsActivity" />
+        <activity android:name=".NotificationsActivity" />
+        <activity android:name=".TableAccessManagementActivity" />
 
 
         <!-- TELA PRINCIPAL -->

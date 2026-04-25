@@ -4,24 +4,22 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 
-import androidx.appcompat.app.AppCompatActivity;
-
-public class ParentHomeActivity extends AppCompatActivity {
+public class ParentHomeActivity extends BaseActivity {
 
     private Button btnRegisteredChildren;
     private Button btnAddChild;
     private Button btnAccessRequests;
-    private Button btnBack;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_parent_home);
 
+        setupBackButton();
+
         btnRegisteredChildren = findViewById(R.id.btnRegisteredChildren);
         btnAddChild = findViewById(R.id.btnAddChild);
         btnAccessRequests = findViewById(R.id.btnAccessRequests);
-        btnBack = findViewById(R.id.btnBack);
 
         btnRegisteredChildren.setOnClickListener(v ->
                 startActivity(new Intent(this, ChildrenListActivity.class)));
@@ -31,7 +29,5 @@ public class ParentHomeActivity extends AppCompatActivity {
 
         btnAccessRequests.setOnClickListener(v ->
                 startActivity(new Intent(this, ManageTableAccessActivity.class)));
-
-        btnBack.setOnClickListener(v -> finish());
     }
 }

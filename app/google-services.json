@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "169414527986",
+    "project_id": "conectatea-eb865",
+    "storage_bucket": "conectatea-eb865.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:169414527986:android:3c45709b1eb1265680f96b",
+        "android_client_info": {
+          "package_name": "com.example.conectaTEA"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCLsAsT5x9gn5xEMM547hS_7Ms0F9CsQN0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

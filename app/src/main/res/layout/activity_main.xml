@@ -1,90 +1,67 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:fillViewport="true"
-    android:background="@drawable/bg_screen_lilac">
+    android:layout_height="match_parent">
 
-    <LinearLayout
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:gravity="center"
-        android:padding="24dp">
+        android:background="@drawable/bg_screen_pink"
+        android:fillViewport="true">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/bg_card"
-            android:elevation="8dp"
+            android:layout_height="match_parent"
             android:orientation="vertical"
-            android:padding="30dp">
+            android:gravity="center"
+            android:padding="24dp">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:text="@string/main_title"
-                android:textColor="@color/title_purple"
-                android:textSize="34sp"
-                android:textStyle="bold" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginTop="6dp"
-                android:text="Conectar, organizar e apoiar"
-                android:textColor="@color/title_pink"
-                android:textSize="15sp"
-                android:textStyle="bold" />
-
-            <TextView
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="18dp"
-                android:gravity="center"
-                android:lineSpacingExtra="2dp"
-                android:text="@string/main_subtitle"
-                android:textColor="@color/text_body"
-                android:textSize="16sp" />
+                android:background="@drawable/bg_card"
+                android:orientation="vertical"
+                android:padding="28dp">
 
-            <Button
-                android:id="@+id/btnEmail"
-                android:layout_width="match_parent"
-                android:layout_height="58dp"
-                android:layout_marginTop="30dp"
-                android:background="@drawable/bg_button_primary"
-                android:text="@string/btn_login"
-                android:textAllCaps="false"
-                android:textColor="@color/text_white"
-                android:textSize="16sp"
-                android:textStyle="bold" />
+                <ImageView
+                    android:layout_width="210dp"
+                    android:layout_height="210dp"
+                    android:layout_gravity="center_horizontal"
+                    android:src="@drawable/logo_conectatea"
+                    android:scaleType="fitCenter" />
 
-            <Button
-                android:id="@+id/btnGoogle"
-                android:layout_width="match_parent"
-                android:layout_height="58dp"
-                android:layout_marginTop="14dp"
-                android:background="@drawable/bg_button_tertiary"
-                android:text="@string/btn_google"
-                android:textAllCaps="false"
-                android:textColor="@color/text_white"
-                android:textSize="16sp"
-                android:textStyle="bold" />
+                <TextView
+                    style="@style/TextBody"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Comunicação visual, pictogramas e apoio escolar em um ambiente acolhedor."
+                    android:textSize="16sp"
+                    android:gravity="center"
+                    android:layout_marginTop="12dp" />
 
-            <Button
-                android:id="@+id/btnCreateAccount"
-                android:layout_width="match_parent"
-                android:layout_height="58dp"
-                android:layout_marginTop="14dp"
-                android:background="@drawable/bg_button_secondary"
-                android:text="@string/btn_create_account"
-                android:textAllCaps="false"
-                android:textColor="@color/text_white"
-                android:textSize="16sp"
-                android:textStyle="bold" />
+                <Button
+                    style="@style/ButtonText"
+                    android:id="@+id/btnEmail"
+                    android:layout_width="match_parent"
+                    android:layout_height="56dp"
+                    android:layout_marginTop="28dp"
+                    android:background="@drawable/bg_button_primary"
+                    android:text="Entrar"
+                    android:textColor="@color/text_white" />
 
+                <Button
+                    style="@style/ButtonText"
+                    android:id="@+id/btnCreateAccount"
+                    android:layout_width="match_parent"
+                    android:layout_height="56dp"
+                    android:layout_marginTop="14dp"
+                    android:background="@drawable/bg_button_secondary"
+                    android:text="Criar conta"
+                    android:textColor="@color/text_white" />
+
+            </LinearLayout>
         </LinearLayout>
-    </LinearLayout>
-</ScrollView>
+    </ScrollView>
+
+</FrameLayout>

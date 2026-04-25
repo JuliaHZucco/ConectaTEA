@@ -1,78 +1,97 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@drawable/bg_screen_lilac"
-    android:fillViewport="true">
+    android:layout_height="match_parent">
 
-    <LinearLayout
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:padding="24dp">
+        android:background="@drawable/bg_screen_pink"
+        android:fillViewport="true">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/bg_card"
+            android:layout_height="match_parent"
             android:orientation="vertical"
-            android:padding="28dp">
+            android:gravity="center"
+            android:padding="24dp">
 
-            <TextView
-                android:id="@+id/tvTableTitle"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColor="@color/title_purple"
-                android:textSize="28sp"
-                android:textStyle="bold" />
+                android:background="@drawable/bg_card"
+                android:orientation="vertical"
+                android:padding="28dp">
 
-            <TextView
-                android:id="@+id/tvCode"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
-                android:textColor="@color/text_body"
-                android:textSize="16sp" />
+                <TextView
+                    android:id="@+id/tvTableTitle"
+                    style="@style/TextTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="28sp" />
 
-            <Button
-                android:id="@+id/btnAddByLink"
-                android:layout_width="match_parent"
-                android:layout_height="56dp"
-                android:layout_marginTop="20dp"
-                android:background="@drawable/bg_button_primary"
-                android:text="Adicionar pictograma por link"
-                android:textAllCaps="false"
-                android:textColor="@color/text_white" />
+                <TextView
+                    android:id="@+id/tvCode"
+                    style="@style/TextBody"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:textSize="16sp" />
 
-            <Button
-                android:id="@+id/btnPickImage"
-                android:layout_width="match_parent"
-                android:layout_height="56dp"
-                android:layout_marginTop="12dp"
-                android:background="@drawable/bg_button_secondary"
-                android:text="Selecionar imagem da galeria"
-                android:textAllCaps="false"
-                android:textColor="@color/text_white" />
+                <Button
+                    android:id="@+id/btnViewPictograms"
+                    style="@style/ButtonText"
+                    android:layout_width="match_parent"
+                    android:layout_height="56dp"
+                    android:layout_marginTop="20dp"
+                    android:background="@drawable/bg_button_primary"
+                    android:text="Visualizar pictogramas"
+                    android:textColor="@color/text_white" />
 
-            <Button
-                android:id="@+id/btnManageAccess"
-                android:layout_width="match_parent"
-                android:layout_height="56dp"
-                android:layout_marginTop="12dp"
-                android:background="@drawable/bg_button_tertiary"
-                android:text="Gerenciar acessos"
-                android:textAllCaps="false"
-                android:textColor="@color/text_white" />
+                <Button
+                    android:id="@+id/btnAddByLink"
+                    style="@style/ButtonText"
+                    android:layout_width="match_parent"
+                    android:layout_height="56dp"
+                    android:layout_marginTop="12dp"
+                    android:background="@drawable/bg_button_secondary"
+                    android:text="Adicionar pictograma por link"
+                    android:textColor="@color/text_white" />
 
-            <Button
-                android:id="@+id/btnBack"
-                android:layout_width="match_parent"
-                android:layout_height="56dp"
-                android:layout_marginTop="12dp"
-                android:background="@drawable/bg_button_tertiary"
-                android:text="Voltar"
-                android:textAllCaps="false"
-                android:textColor="@color/text_white" />
+                <Button
+                    android:id="@+id/btnPickImage"
+                    style="@style/ButtonText"
+                    android:layout_width="match_parent"
+                    android:layout_height="56dp"
+                    android:layout_marginTop="12dp"
+                    android:background="@drawable/bg_button_tertiary"
+                    android:text="Selecionar imagem da galeria"
+                    android:textColor="@color/text_white" />
+
+                <Button
+                    android:id="@+id/btnManageAccess"
+                    style="@style/ButtonText"
+                    android:layout_width="match_parent"
+                    android:layout_height="56dp"
+                    android:layout_marginTop="12dp"
+                    android:background="@drawable/bg_button_secondary"
+                    android:text="Gerenciar acessos"
+                    android:textColor="@color/text_white" />
+
+            </LinearLayout>
         </LinearLayout>
-    </LinearLayout>
-</ScrollView>
+    </ScrollView>
+
+    <ImageView
+        android:id="@+id/btnBack"
+        android:layout_width="56dp"
+        android:layout_height="56dp"
+        android:layout_gravity="bottom|start"
+        android:layout_margin="20dp"
+        android:background="@drawable/bg_back_circle"
+        android:src="@android:drawable/ic_media_previous"
+        android:padding="12dp"
+        app:tint="@color/title_purple" />
+
+</FrameLayout>

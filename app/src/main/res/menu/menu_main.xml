@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+
+        <item
+            android:id="@+id/menu_home"
+            android:title="Início" />
+
+        <item
+            android:id="@+id/menu_children"
+            android:title="Crianças cadastradas" />
+
+        <item
+            android:id="@+id/menu_add_child"
+            android:title="Cadastrar criança" />
+
+        <item
+            android:id="@+id/menu_requests"
+            android:title="Solicitações de acesso" />
+
+        <item
+            android:id="@+id/menu_request_access"
+            android:title="Solicitar acesso" />
+
+        <item
+            android:id="@+id/menu_authorized_tables"
+            android:title="Tabelas autorizadas" />
+
+        <item
+            android:id="@+id/menu_my_requests"
+            android:title="Minhas solicitações" />
+
+        <item
+            android:id="@+id/menu_notifications"
+            android:title="Notificações" />
+
+        <item
+            android:id="@+id/menu_profile"
+            android:title="Meu perfil" />
+
+        <item
+            android:id="@+id/menu_logout"
+            android:title="Sair da conta"
+            android:iconTint="#FF0000" />
+
+    </group>
+
+</menu>

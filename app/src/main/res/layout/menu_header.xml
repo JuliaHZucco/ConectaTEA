@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="230dp"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:background="@drawable/bg_menu_header"
+    android:paddingTop="16dp"
+    android:paddingBottom="16dp"
+    android:paddingStart="22dp"
+    android:paddingEnd="22dp">
+
+    <ImageView
+        android:layout_width="110dp"
+        android:layout_height="110dp"
+        android:src="@drawable/logo_menu"
+        android:scaleType="fitCenter" />
+
+    <TextView
+        android:id="@+id/tvMenuName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="ConectaTEA"
+        android:textColor="@color/title_purple"
+        android:textStyle="bold"
+        android:textSize="24sp"
+        android:fontFamily="@font/raleway_bold"
+        android:layout_marginTop="6dp" />
+
+    <TextView
+        android:id="@+id/tvMenuProfile"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Responsável"
+        android:textColor="@color/accent_pastel"
+        android:textStyle="bold"
+        android:textSize="15sp"
+        android:fontFamily="@font/raleway_medium"
+        android:layout_marginTop="2dp" />
+</LinearLayout>

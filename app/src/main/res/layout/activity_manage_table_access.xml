@@ -1,68 +1,66 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@drawable/bg_screen_pink"
-    android:fillViewport="true">
+    android:layout_height="match_parent">
 
-    <LinearLayout
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:padding="24dp">
+        android:background="@drawable/bg_screen_pink"
+        android:fillViewport="true">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/bg_card"
+            android:layout_height="match_parent"
             android:orientation="vertical"
-            android:padding="28dp">
+            android:gravity="center"
+            android:padding="24dp">
 
-            <TextView
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Solicitações de acesso"
-                android:textColor="@color/title_purple"
-                android:textSize="28sp"
-                android:textStyle="bold" />
+                android:background="@drawable/bg_card"
+                android:orientation="vertical"
+                android:padding="28dp">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="14dp"
-                android:text="Professor João solicitou acesso à tabela de pictogramas."
-                android:textColor="@color/text_body"
-                android:textSize="16sp" />
+                <TextView
+                    style="@style/TextTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Solicitações de acesso"
+                    android:textSize="28sp" />
 
-            <Button
-                android:id="@+id/btnApprove"
-                android:layout_width="match_parent"
-                android:layout_height="56dp"
-                android:layout_marginTop="20dp"
-                android:background="@drawable/bg_button_primary"
-                android:text="Aprovar"
-                android:textAllCaps="false"
-                android:textColor="@color/text_white" />
+                <LinearLayout
+                    android:id="@+id/containerRequests"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginTop="16dp" />
 
-            <Button
-                android:id="@+id/btnDeny"
-                android:layout_width="match_parent"
-                android:layout_height="56dp"
-                android:layout_marginTop="12dp"
-                android:background="@drawable/bg_button_secondary"
-                android:text="Negar"
-                android:textAllCaps="false"
-                android:textColor="@color/text_white" />
+                <TextView
+                    android:id="@+id/tvNoRequests"
+                    style="@style/TextBody"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:gravity="center"
+                    android:text="Nenhuma solicitação de acesso no momento."
+                    android:visibility="gone" />
 
-            <Button
-                android:id="@+id/btnBack"
-                android:layout_width="match_parent"
-                android:layout_height="56dp"
-                android:layout_marginTop="12dp"
-                android:background="@drawable/bg_button_tertiary"
-                android:text="Voltar"
-                android:textAllCaps="false"
-                android:textColor="@color/text_white" />
+            </LinearLayout>
         </LinearLayout>
-    </LinearLayout>
-</ScrollView>
+    </ScrollView>
+
+    <ImageView
+        android:id="@+id/btnBack"
+        android:layout_width="56dp"
+        android:layout_height="56dp"
+        android:layout_gravity="bottom|start"
+        android:layout_margin="20dp"
+        android:background="@drawable/bg_back_circle"
+        android:src="@android:drawable/ic_media_previous"
+        android:padding="12dp"
+        app:tint="@color/title_purple" />
+
+</FrameLayout>
