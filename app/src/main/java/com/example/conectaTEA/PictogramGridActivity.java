@@ -1,7 +1,10 @@
 package com.example.conectaTEA;
 
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
+import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,6 +24,8 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class PictogramGridActivity extends BaseActivity {
 
@@ -67,6 +72,7 @@ public class PictogramGridActivity extends BaseActivity {
                     }
 
                     pictogramList.clear();
+
                     if (value != null) {
                         for (QueryDocumentSnapshot doc : value) {
                             Pictogram p = doc.toObject(Pictogram.class);
@@ -74,6 +80,7 @@ public class PictogramGridActivity extends BaseActivity {
                             pictogramList.add(p);
                         }
                     }
+
                     adapter.notifyDataSetChanged();
                 });
     }
@@ -81,7 +88,117 @@ public class PictogramGridActivity extends BaseActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if (pictogramsListener != null) pictogramsListener.remove();
+
+        if (pictogramsListener != null) {
+            pictogramsListener.remove();
+        }
+    }
+
+    private int dpToPx(int dp) {
+        return (int) (dp * getResources().getDisplayMetrics().density);
+    }
+
+    private GradientDrawable createBorderDrawable(String colorHex) {
+        int borderColor = parseColorOrDefault(colorHex);
+
+        GradientDrawable drawable = new GradientDrawable();
+        drawable.setColor(Color.TRANSPARENT);
+        drawable.setStroke(dpToPx(5), borderColor);
+        drawable.setCornerRadius(dpToPx(20));
+
+        return drawable;
+    }
+
+    private int parseColorOrDefault(String colorHex) {
+        if (colorHex == null || colorHex.trim().isEmpty()) {
+            return Color.parseColor("#9E9E9E");
+        }
+
+        try {
+            return Color.parseColor(colorHex);
+        } catch (IllegalArgumentException e) {
+            return Color.parseColor("#9E9E9E");
+        }
+    }
+
+    private String getSafeCategory(String category) {
+        if (category == null || category.trim().isEmpty()) {
+            return "Sem categoria";
+        }
+
+        return category;
+    }
+
+    private void loadPictogramImage(ImageView imageView, Pictogram pictogram) {
+        String imageBase64 = pictogram.getImageBase64();
+
+        if (imageBase64 != null && !imageBase64.trim().isEmpty()) {
+            try {
+                byte[] imageBytes = Base64.decode(imageBase64, Base64.DEFAULT);
+
+                Glide.with(PictogramGridActivity.this)
+                        .load(imageBytes)
+                        .placeholder(android.R.drawable.ic_menu_gallery)
+                        .error(android.R.drawable.ic_menu_report_image)
+                        .centerCrop()
+                        .into(imageView);
+
+                return;
+            } catch (Exception ignored) {
+                // Se Base64 falhar, tenta carregar por link.
+            }
+        }
+
+        String fixedImageUrl = normalizeImageUrl(pictogram.getImageUrl());
+
+        Glide.with(PictogramGridActivity.this)
+                .load(fixedImageUrl)
+                .placeholder(android.R.drawable.ic_menu_gallery)
+                .error(android.R.drawable.ic_menu_report_image)
+                .centerCrop()
+                .into(imageView);
+    }
+
+    private String normalizeImageUrl(String rawUrl) {
+        if (rawUrl == null) return "";
+
+        String url = rawUrl.trim();
+
+        if (url.isEmpty()) {
+            return "";
+        }
+
+        String arasaacId = extractArasaacId(url);
+
+        if (arasaacId != null) {
+            return buildArasaacDirectImageUrl(arasaacId);
+        }
+
+        return url;
+    }
+
+    private String extractArasaacId(String url) {
+        if (url == null) return null;
+
+        Pattern pagePattern = Pattern.compile("/pictograms/[^/]+/(\\d+)");
+        Matcher pageMatcher = pagePattern.matcher(url);
+
+        if (pageMatcher.find()) {
+            return pageMatcher.group(1);
+        }
+
+        Pattern apiPattern = Pattern.compile("/api/pictograms/(\\d+)");
+        Matcher apiMatcher = apiPattern.matcher(url);
+
+        if (apiMatcher.find()) {
+            return apiMatcher.group(1);
+        }
+
+        return null;
+    }
+
+    private String buildArasaacDirectImageUrl(String id) {
+        return "https://static.arasaac.org/pictograms/" + id + "/" + id + "_300.png";
     }
 
     private class PictogramAdapter extends RecyclerView.Adapter<PictogramAdapter.ViewHolder> {
@@ -101,16 +218,17 @@ public class PictogramGridActivity extends BaseActivity {
         @Override
         public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
             Pictogram p = list.get(position);
+
             holder.tvName.setText(p.getName());
-            Glide.with(PictogramGridActivity.this)
-                    .load(p.getImageUrl())
-                    .placeholder(android.R.drawable.ic_menu_gallery)
-                    .centerCrop()
-                    .into(holder.ivPictogram);
+            holder.tvCategory.setText(getSafeCategory(p.getCategory()));
+            holder.rootPictogramBorder.setBackground(createBorderDrawable(p.getBorderColor()));
+
+            loadPictogramImage(holder.ivPictogram, p);
 
             holder.itemView.setOnClickListener(v -> {
                 Intent intent = new Intent(PictogramGridActivity.this, PictogramDetailActivity.class);
-                intent.putExtra("IMAGE_URL", p.getImageUrl());
+                intent.putExtra("IMAGE_URL", normalizeImageUrl(p.getImageUrl()));
+                intent.putExtra("IMAGE_BASE64", p.getImageBase64());
                 intent.putExtra("NAME", p.getName());
                 startActivity(intent);
             });
@@ -122,13 +240,18 @@ public class PictogramGridActivity extends BaseActivity {
         }
 
         class ViewHolder extends RecyclerView.ViewHolder {
+            View rootPictogramBorder;
             ImageView ivPictogram;
             TextView tvName;
+            TextView tvCategory;
 
             public ViewHolder(@NonNull View itemView) {
                 super(itemView);
+
+                rootPictogramBorder = itemView.findViewById(R.id.rootPictogramBorder);
                 ivPictogram = itemView.findViewById(R.id.ivPictogram);
                 tvName = itemView.findViewById(R.id.tvPictogramName);
+                tvCategory = itemView.findViewById(R.id.tvPictogramCategory);
             }
         }
     }

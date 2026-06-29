@@ -10,10 +10,6 @@ import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
-
-import java.util.UUID;
 
 public class TableDetailsActivity extends BaseActivity {
 
@@ -59,12 +55,7 @@ public class TableDetailsActivity extends BaseActivity {
             startActivity(intent);
         });
 
-        btnPickImage.setOnClickListener(v -> {
-            Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
-            intent.setType("image/*");
-            intent.addCategory(Intent.CATEGORY_OPENABLE);
-            startActivityForResult(intent, PICK_IMAGE_REQUEST);
-        });
+        btnPickImage.setOnClickListener(v -> openImagePicker());
 
         btnManageAccess.setOnClickListener(v -> {
             Intent intent = new Intent(this, TableAccessManagementActivity.class);
@@ -74,18 +65,31 @@ public class TableDetailsActivity extends BaseActivity {
         });
     }
 
+    private void openImagePicker() {
+        Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+        intent.setType("image/*");
+        intent.addCategory(Intent.CATEGORY_OPENABLE);
+        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        intent.addFlags(Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION);
+        startActivityForResult(intent, PICK_IMAGE_REQUEST);
+    }
+
     private void checkUserRole() {
         String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
-        FirebaseFirestore.getInstance().collection("users").document(uid).get().addOnSuccessListener(doc -> {
-            if (doc.exists()) {
-                String role = doc.getString("profile");
-                if ("professor".equals(role)) {
-                    btnAddByLink.setVisibility(View.GONE);
-                    btnPickImage.setVisibility(View.GONE);
-                    btnManageAccess.setVisibility(View.GONE);
-                }
-            }
-        });
+
+        FirebaseFirestore.getInstance().collection("users").document(uid)
+                .get()
+                .addOnSuccessListener(doc -> {
+                    if (doc.exists()) {
+                        String role = doc.getString("profile");
+
+                        if ("professor".equals(role)) {
+                            btnAddByLink.setVisibility(View.GONE);
+                            btnPickImage.setVisibility(View.GONE);
+                            btnManageAccess.setVisibility(View.GONE);
+                        }
+                    }
+                });
     }
 
     @Override
@@ -94,27 +98,23 @@ public class TableDetailsActivity extends BaseActivity {
 
         if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null) {
             Uri imageUri = data.getData();
-            if (imageUri != null) {
-                uploadImage(imageUri);
-            }
-        }
-    }
 
-    private void uploadImage(Uri uri) {
-        String path = "pictograms/" + UUID.randomUUID().toString() + ".jpg";
-        StorageReference ref = FirebaseStorage.getInstance().getReference().child(path);
-        
-        Toast.makeText(this, "Fazendo upload da imagem...", Toast.LENGTH_SHORT).show();
-        
-        ref.putFile(uri).addOnSuccessListener(taskSnapshot -> {
-            ref.getDownloadUrl().addOnSuccessListener(downloadUri -> {
-                Intent intent = new Intent(this, AddPictogramActivity.class);
-                intent.putExtra("TABLE_ID", tableId);
-                intent.putExtra("IMAGE_URL", downloadUri.toString());
-                startActivity(intent);
-            });
-        }).addOnFailureListener(e -> {
-            Toast.makeText(this, "Erro no upload: " + e.getMessage(), Toast.LENGTH_LONG).show();
-        });
+            if (imageUri == null) {
+                Toast.makeText(this, "Imagem não encontrada.", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            try {
+                final int takeFlags = data.getFlags() & Intent.FLAG_GRANT_READ_URI_PERMISSION;
+                getContentResolver().takePersistableUriPermission(imageUri, takeFlags);
+            } catch (Exception ignored) {
+                // Se não conseguir permissão persistente, ainda tentamos usar a imagem imediatamente.
+            }
+
+            Intent intent = new Intent(this, AddPictogramActivity.class);
+            intent.putExtra("TABLE_ID", tableId);
+            intent.putExtra("LOCAL_IMAGE_URI", imageUri.toString());
+            startActivity(intent);
+        }
     }
 }
