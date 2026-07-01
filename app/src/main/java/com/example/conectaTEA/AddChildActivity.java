@@ -10,6 +10,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 
 public class AddChildActivity extends BaseActivity {
 
@@ -40,11 +41,13 @@ public class AddChildActivity extends BaseActivity {
             btnSaveChild.setText("Salvando...");
 
             String parentId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+            String childCode = generateChildCode();
 
             Map<String, Object> child = new HashMap<>();
             child.put("name", childName);
             child.put("info", childInfo);
             child.put("parentId", parentId);
+            child.put("code", childCode);
 
             FirebaseFirestore.getInstance().collection("children")
                     .add(child)
@@ -59,5 +62,16 @@ public class AddChildActivity extends BaseActivity {
                         Toast.makeText(this, "Erro ao salvar: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                     });
         });
+    }
+
+    private String generateChildCode() {
+        String chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+        StringBuilder code = new StringBuilder("ALU-");
+        Random rnd = new Random();
+        while (code.length() < 9) {
+            int index = (int) (rnd.nextFloat() * chars.length());
+            code.append(chars.charAt(index));
+        }
+        return code.toString();
     }
 }

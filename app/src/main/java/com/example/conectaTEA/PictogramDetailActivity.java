@@ -2,6 +2,7 @@ package com.example.conectaTEA;
 
 import android.os.Bundle;
 import android.util.Base64;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -47,7 +48,6 @@ public class PictogramDetailActivity extends AppCompatActivity {
 
                 return;
             } catch (Exception ignored) {
-                // Se Base64 falhar, tenta carregar por link.
             }
         }
 

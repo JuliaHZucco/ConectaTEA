@@ -12,7 +12,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.io.ByteArrayOutputStream;
@@ -25,7 +24,7 @@ import java.util.regex.Pattern;
 
 public class AddPictogramActivity extends BaseActivity {
 
-    private EditText etPictogramName, etPictogramLink, etPictogramCategory, etPictogramBorderColor;
+    private EditText etPictogramName, etPictogramLink, etPictogramCategory;
     private Button btnSavePictogram;
     private String tableId, passedImageUrl, localImageUriString;
 
@@ -39,7 +38,6 @@ public class AddPictogramActivity extends BaseActivity {
         etPictogramName = findViewById(R.id.etPictogramName);
         etPictogramLink = findViewById(R.id.etPictogramLink);
         etPictogramCategory = findViewById(R.id.etPictogramCategory);
-        etPictogramBorderColor = findViewById(R.id.etPictogramBorderColor);
         btnSavePictogram = findViewById(R.id.btnSavePictogram);
 
         tableId = getIntent().getStringExtra("TABLE_ID");
@@ -57,9 +55,6 @@ public class AddPictogramActivity extends BaseActivity {
         btnSavePictogram.setOnClickListener(v -> {
             String name = etPictogramName.getText().toString().trim();
             String category = formatCategory(etPictogramCategory.getText().toString());
-
-            String rawColor = etPictogramBorderColor.getText().toString().trim();
-            String borderColor = rawColor.isEmpty() ? null : normalizeColor(rawColor);
 
             String link = "";
             String imageBase64 = "";
@@ -92,106 +87,31 @@ public class AddPictogramActivity extends BaseActivity {
                 return;
             }
 
-            if (!rawColor.isEmpty() && borderColor == null) {
-                Toast.makeText(this, "Informe uma cor válida. Exemplo: vermelho, azul ou #FF0000", Toast.LENGTH_LONG).show();
-                return;
-            }
-
             if (tableId == null) {
                 Toast.makeText(this, "Erro: Tabela não identificada.", Toast.LENGTH_SHORT).show();
                 return;
             }
 
             btnSavePictogram.setEnabled(false);
-            btnSavePictogram.setText("Verificando categoria...");
+            btnSavePictogram.setText("Buscando cor da tabela...");
 
-            validateCategoryColorAndSave(name, link, imageBase64, category, borderColor);
+            fetchTableColorAndSave(name, link, imageBase64, category);
         });
     }
 
-    private void validateCategoryColorAndSave(String name, String link, String imageBase64, String category, String borderColor) {
-        FirebaseFirestore.getInstance().collection("pictograms")
-                .whereEqualTo("tableId", tableId)
+    private void fetchTableColorAndSave(String name, String link, String imageBase64, String category) {
+        FirebaseFirestore.getInstance().collection("pictogramTables").document(tableId)
                 .get()
-                .addOnSuccessListener(querySnapshot -> {
-                    String newCategoryKey = categoryKey(category);
-
-                    String existingColorForSameCategory = null;
-                    String existingCategoryName = null;
-                    String categoryUsingTypedColor = null;
-
-                    for (DocumentSnapshot doc : querySnapshot.getDocuments()) {
-                        String existingCategory = doc.getString("category");
-                        String existingColor = doc.getString("borderColor");
-
-                        if (existingCategory == null || existingColor == null) {
-                            continue;
-                        }
-
-                        String existingCategoryFormatted = formatCategory(existingCategory);
-                        String existingCategoryKey = categoryKey(existingCategoryFormatted);
-                        String existingColorNormalized = normalizeColor(existingColor);
-
-                        if (existingColorNormalized == null) {
-                            continue;
-                        }
-
-                        boolean sameCategory = existingCategoryKey.equals(newCategoryKey);
-
-                        if (sameCategory && existingColorForSameCategory == null) {
-                            existingColorForSameCategory = existingColorNormalized;
-                            existingCategoryName = existingCategoryFormatted;
-                        }
-
-                        if (!sameCategory && borderColor != null && existingColorNormalized.equalsIgnoreCase(borderColor)) {
-                            categoryUsingTypedColor = existingCategoryFormatted;
-                        }
+                .addOnSuccessListener(documentSnapshot -> {
+                    String tableBorderColor = documentSnapshot.getString("borderColor");
+                    if (tableBorderColor == null) {
+                        tableBorderColor = "#9E9E9E";
                     }
-
-                    String resolvedBorderColor = borderColor;
-
-                    if (existingColorForSameCategory != null) {
-                        if (resolvedBorderColor == null) {
-                            resolvedBorderColor = existingColorForSameCategory;
-                        } else if (!resolvedBorderColor.equalsIgnoreCase(existingColorForSameCategory)) {
-                            resetSaveButton();
-                            Toast.makeText(
-                                    this,
-                                    "A categoria " + existingCategoryName + " já usa a cor " + existingColorForSameCategory + ". Deixe o campo vazio ou use essa mesma cor.",
-                                    Toast.LENGTH_LONG
-                            ).show();
-                            return;
-                        }
-
-                        savePictogram(name, link, imageBase64, category, resolvedBorderColor);
-                        return;
-                    }
-
-                    if (resolvedBorderColor == null) {
-                        resetSaveButton();
-                        Toast.makeText(
-                                this,
-                                "Essa é a primeira vez que a categoria " + category + " será usada. Informe uma cor para ela.",
-                                Toast.LENGTH_LONG
-                        ).show();
-                        return;
-                    }
-
-                    if (categoryUsingTypedColor != null) {
-                        resetSaveButton();
-                        Toast.makeText(
-                                this,
-                                "A cor " + resolvedBorderColor + " já está sendo usada pela categoria " + categoryUsingTypedColor + ". Escolha outra cor.",
-                                Toast.LENGTH_LONG
-                        ).show();
-                        return;
-                    }
-
-                    savePictogram(name, link, imageBase64, category, resolvedBorderColor);
+                    savePictogram(name, link, imageBase64, category, tableBorderColor);
                 })
                 .addOnFailureListener(e -> {
                     resetSaveButton();
-                    Toast.makeText(this, "Erro ao validar categoria: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                    Toast.makeText(this, "Erro ao buscar cor da tabela: " + e.getMessage(), Toast.LENGTH_LONG).show();
                 });
     }
 
@@ -409,54 +329,5 @@ public class AddPictogramActivity extends BaseActivity {
         }
 
         return result.toString();
-    }
-
-    private String normalizeColor(String rawColor) {
-        if (rawColor == null) return null;
-
-        String colorText = rawColor.trim();
-
-        if (colorText.isEmpty()) return null;
-
-        String key = colorText.toLowerCase(Locale.ROOT);
-
-        switch (key) {
-            case "vermelho":
-                return "#F44336";
-            case "azul":
-                return "#2196F3";
-            case "verde":
-                return "#4CAF50";
-            case "amarelo":
-                return "#FFEB3B";
-            case "laranja":
-                return "#FF9800";
-            case "roxo":
-                return "#9C27B0";
-            case "lilás":
-            case "lilas":
-                return "#B39DDB";
-            case "rosa":
-                return "#E91E63";
-            case "marrom":
-                return "#795548";
-            case "cinza":
-                return "#9E9E9E";
-            case "preto":
-                return "#000000";
-            case "branco":
-                return "#FFFFFF";
-        }
-
-        if (colorText.matches("^[0-9a-fA-F]{6}$")) {
-            colorText = "#" + colorText;
-        }
-
-        try {
-            int parsedColor = Color.parseColor(colorText);
-            return String.format(Locale.ROOT, "#%06X", (0xFFFFFF & parsedColor));
-        } catch (IllegalArgumentException e) {
-            return null;
-        }
     }
 }

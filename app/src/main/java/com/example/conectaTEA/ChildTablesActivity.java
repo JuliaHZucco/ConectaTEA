@@ -1,10 +1,13 @@
 package com.example.conectaTEA;
 
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -17,9 +20,10 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 public class ChildTablesActivity extends BaseActivity {
 
     private TextView tvChildName;
+    private ImageView btnChildOptions;
     private LinearLayout containerTables;
     private FloatingActionButton fabAddTable;
-    private String childId, childName;
+    private String childId, childName, childInfo, childCode;
     private ListenerRegistration tablesListener;
     private boolean isTeacher = false;
 
@@ -31,6 +35,7 @@ public class ChildTablesActivity extends BaseActivity {
         setupBackButton();
 
         tvChildName = findViewById(R.id.tvChildName);
+        btnChildOptions = findViewById(R.id.btnChildOptions);
         containerTables = findViewById(R.id.containerTables);
         fabAddTable = findViewById(R.id.fabAddTable);
 
@@ -39,15 +44,16 @@ public class ChildTablesActivity extends BaseActivity {
         
         tvChildName.setText("Tabelas de pictogramas de " + childName);
 
+        fetchChildData();
         checkUserRole();
+
+        btnChildOptions.setOnClickListener(this::showChildOptionsMenu);
 
         fabAddTable.setOnClickListener(v -> {
             Intent intent = new Intent(this, AddTableActivity.class);
             intent.putExtra("CHILD_ID", childId);
             startActivity(intent);
         });
-
-        loadTablesRealtime();
     }
 
     private void checkUserRole() {
@@ -61,6 +67,45 @@ public class ChildTablesActivity extends BaseActivity {
                 }
             }
         });
+    }
+
+    private void fetchChildData() {
+        if (childId == null) return;
+        FirebaseFirestore.getInstance().collection("children").document(childId).get().addOnSuccessListener(doc -> {
+            if (doc.exists()) {
+                childInfo = doc.getString("info");
+                childCode = doc.getString("code");
+                if (childCode != null) {
+                    tvChildName.setText("Tabelas de " + childName + "\n(Código do Aluno: " + childCode + ")");
+                }
+                loadTablesRealtime();
+            }
+        });
+    }
+
+    private void showChildOptionsMenu(View v) {
+        PopupMenu popup = new PopupMenu(this, v);
+        popup.getMenu().add("Observações");
+        popup.setOnMenuItemClickListener(item -> {
+            if ("Observações".equals(item.getTitle())) {
+                showObservationsModal();
+                return true;
+            }
+            return false;
+        });
+        popup.show();
+    }
+
+    private void showObservationsModal() {
+        String info = (childInfo == null || childInfo.trim().isEmpty()) 
+                ? "Nenhuma observação cadastrada para esta criança." 
+                : childInfo;
+
+        new AlertDialog.Builder(this)
+                .setTitle("Observações: " + childName)
+                .setMessage(info)
+                .setPositiveButton("Fechar", null)
+                .show();
     }
 
     private void loadTablesRealtime() {
@@ -80,6 +125,11 @@ public class ChildTablesActivity extends BaseActivity {
                             String name = document.getString("name");
                             String tableId = document.getId();
                             String code = document.getString("code");
+                            
+                            if (code == null || code.equals("SEM-CODIGO")) {
+                                code = childCode;
+                            }
+
                             addTableButton(name, tableId, code);
                         }
                     }

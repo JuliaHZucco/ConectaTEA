@@ -34,15 +34,33 @@ public class NotificationsActivity extends BaseActivity {
         String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
         notifListener = FirebaseFirestore.getInstance().collection("notifications")
                 .whereEqualTo("userId", uid)
-                .orderBy("timestamp", Query.Direction.DESCENDING)
                 .addSnapshotListener((value, error) -> {
-                    if (error != null) return;
                     containerNotifications.removeAllViews();
+                    if (error != null) {
+                        tvNoNotif.setVisibility(View.VISIBLE);
+                        tvNoNotif.setText("Erro ao carregar notificações.");
+                        return;
+                    }
+
                     if (value == null || value.isEmpty()) {
                         tvNoNotif.setVisibility(View.VISIBLE);
+                        tvNoNotif.setText("Você não possui notificações no momento.");
                     } else {
                         tvNoNotif.setVisibility(View.GONE);
+                        
+                        java.util.List<QueryDocumentSnapshot> sortedDocs = new java.util.ArrayList<>();
                         for (QueryDocumentSnapshot doc : value) {
+                            sortedDocs.add(doc);
+                        }
+                        
+                        java.util.Collections.sort(sortedDocs, (d1, d2) -> {
+                            com.google.firebase.Timestamp t1 = d1.getTimestamp("timestamp");
+                            com.google.firebase.Timestamp t2 = d2.getTimestamp("timestamp");
+                            if (t1 == null || t2 == null) return 0;
+                            return t2.compareTo(t1);
+                        });
+
+                        for (QueryDocumentSnapshot doc : sortedDocs) {
                             addNotifRow(doc);
                         }
                     }

@@ -31,7 +31,7 @@ public class RequestAccessActivity extends BaseActivity {
             String code = etTableCode.getText().toString().trim();
 
             if (code.isEmpty()) {
-                Toast.makeText(this, "Informe o código da tabela", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Informe o código do aluno", Toast.LENGTH_SHORT).show();
                 return;
             }
 
@@ -54,7 +54,7 @@ public class RequestAccessActivity extends BaseActivity {
                     } else {
                         btnSendRequest.setEnabled(true);
                         btnSendRequest.setText("Enviar solicitação");
-                        Toast.makeText(this, "Tabela não encontrada. Verifique o código.", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(this, "Aluno não encontrado. Verifique o código.", Toast.LENGTH_SHORT).show();
                     }
                 });
     }

@@ -29,6 +29,16 @@
 
     </LinearLayout>
 
+    <TextView
+        android:id="@+id/tvEmptyPictograms"
+        style="@style/TextBody"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:text="Nenhum pictograma adicionado a esta tabela."
+        android:visibility="gone" />
+
     <ImageView
         android:id="@+id/btnBack"
         android:layout_width="56dp"

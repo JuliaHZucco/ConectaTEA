@@ -11,6 +11,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -22,6 +23,7 @@ public class ChildrenListActivity extends BaseActivity  {
 
     private LinearLayout containerChildren;
     private TextView tvEmptyState;
+    private FloatingActionButton fabAddChild;
     private ListenerRegistration childrenListener;
 
     @Override
@@ -33,6 +35,12 @@ public class ChildrenListActivity extends BaseActivity  {
 
         containerChildren = findViewById(R.id.containerChildren);
         tvEmptyState = findViewById(R.id.tvEmptyState);
+        fabAddChild = findViewById(R.id.fabAddChild);
+
+        fabAddChild.setOnClickListener(v -> {
+            Intent intent = new Intent(this, AddChildActivity.class);
+            startActivity(intent);
+        });
 
         loadChildrenRealtime();
     }
@@ -58,13 +66,14 @@ public class ChildrenListActivity extends BaseActivity  {
                         for (QueryDocumentSnapshot document : value) {
                             String name = document.getString("name");
                             String childId = document.getId();
-                            addChildRow(name, childId);
+                            String code = document.getString("code");
+                            addChildRow(name, childId, code);
                         }
                     }
                 });
     }
 
-    private void addChildRow(String name, String childId) {
+    private void addChildRow(String name, String childId, String code) {
         LinearLayout row = new LinearLayout(this);
         row.setOrientation(LinearLayout.HORIZONTAL);
         row.setGravity(Gravity.CENTER_VERTICAL);
@@ -75,13 +84,19 @@ public class ChildrenListActivity extends BaseActivity  {
         row.setLayoutParams(rowParams);
 
         Button btn = new Button(this);
-        LinearLayout.LayoutParams btnParams = new LinearLayout.LayoutParams(0, (int) (56 * getResources().getDisplayMetrics().density), 1);
+        LinearLayout.LayoutParams btnParams = new LinearLayout.LayoutParams(0, (int) (64 * getResources().getDisplayMetrics().density), 1);
         btn.setLayoutParams(btnParams);
         btn.setBackgroundResource(R.drawable.bg_button_primary);
-        btn.setText(name);
+        
+        String displayText = name;
+        if (code != null) {
+            displayText += " (" + code + ")";
+        }
+        btn.setText(displayText);
+        
         btn.setTextColor(androidx.core.content.ContextCompat.getColor(this, R.color.text_white));
         btn.setAllCaps(false);
-        btn.setTextSize(16);
+        btn.setTextSize(15);
         btn.setOnClickListener(v -> {
             Intent intent = new Intent(this, ChildTablesActivity.class);
             intent.putExtra("CHILD_NAME", name);

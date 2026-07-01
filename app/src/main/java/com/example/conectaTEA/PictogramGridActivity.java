@@ -1,5 +1,6 @@
 package com.example.conectaTEA;
 
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
@@ -30,7 +31,7 @@ import java.util.regex.Pattern;
 public class PictogramGridActivity extends BaseActivity {
 
     private RecyclerView rvPictograms;
-    private TextView tvGridTitle;
+    private TextView tvGridTitle, tvEmptyPictograms;
     private String tableId, tableName;
     private PictogramAdapter adapter;
     private List<Pictogram> pictogramList;
@@ -44,6 +45,7 @@ public class PictogramGridActivity extends BaseActivity {
 
         rvPictograms = findViewById(R.id.rvPictograms);
         tvGridTitle = findViewById(R.id.tvGridTitle);
+        tvEmptyPictograms = findViewById(R.id.tvEmptyPictograms);
 
         tableId = getIntent().getStringExtra("TABLE_ID");
         tableName = getIntent().getStringExtra("TABLE_NAME");
@@ -73,7 +75,10 @@ public class PictogramGridActivity extends BaseActivity {
 
                     pictogramList.clear();
 
-                    if (value != null) {
+                    if (value == null || value.isEmpty()) {
+                        tvEmptyPictograms.setVisibility(View.VISIBLE);
+                    } else {
+                        tvEmptyPictograms.setVisibility(View.GONE);
                         for (QueryDocumentSnapshot doc : value) {
                             Pictogram p = doc.toObject(Pictogram.class);
                             p.setId(doc.getId());
@@ -145,7 +150,6 @@ public class PictogramGridActivity extends BaseActivity {
 
                 return;
             } catch (Exception ignored) {
-                // Se Base64 falhar, tenta carregar por link.
             }
         }
 
@@ -225,6 +229,21 @@ public class PictogramGridActivity extends BaseActivity {
 
             loadPictogramImage(holder.ivPictogram, p);
 
+            holder.btnDelete.setOnClickListener(v -> {
+                new AlertDialog.Builder(PictogramGridActivity.this)
+                        .setTitle("Remover Pictograma")
+                        .setMessage("Deseja realmente remover este pictograma?")
+                        .setPositiveButton("Sim", (dialog, which) -> {
+                            FirebaseFirestore.getInstance().collection("pictograms")
+                                    .document(p.getId())
+                                    .delete()
+                                    .addOnSuccessListener(aVoid -> Toast.makeText(PictogramGridActivity.this, "Pictograma removido", Toast.LENGTH_SHORT).show())
+                                    .addOnFailureListener(e -> Toast.makeText(PictogramGridActivity.this, "Erro ao remover", Toast.LENGTH_SHORT).show());
+                        })
+                        .setNegativeButton("Não", null)
+                        .show();
+            });
+
             holder.itemView.setOnClickListener(v -> {
                 Intent intent = new Intent(PictogramGridActivity.this, PictogramDetailActivity.class);
                 intent.putExtra("IMAGE_URL", normalizeImageUrl(p.getImageUrl()));
@@ -244,6 +263,7 @@ public class PictogramGridActivity extends BaseActivity {
             ImageView ivPictogram;
             TextView tvName;
             TextView tvCategory;
+            ImageView btnDelete;
 
             public ViewHolder(@NonNull View itemView) {
                 super(itemView);
@@ -252,6 +272,7 @@ public class PictogramGridActivity extends BaseActivity {
                 ivPictogram = itemView.findViewById(R.id.ivPictogram);
                 tvName = itemView.findViewById(R.id.tvPictogramName);
                 tvCategory = itemView.findViewById(R.id.tvPictogramCategory);
+                btnDelete = itemView.findViewById(R.id.btnDeletePictogram);
             }
         }
     }

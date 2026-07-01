@@ -37,7 +37,7 @@
                     android:layout_height="56dp"
                     android:layout_marginTop="20dp"
                     android:background="@drawable/bg_input"
-                    android:hint="Código da tabela de pictogramas"
+                    android:hint="Código do Aluno"
                     android:textColor="@color/text_title"
                     android:textColorHint="@color/text_body"
                     android:fontFamily="@font/raleway_regular"

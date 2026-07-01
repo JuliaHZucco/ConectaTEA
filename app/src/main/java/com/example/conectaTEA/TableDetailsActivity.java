@@ -38,7 +38,16 @@ public class TableDetailsActivity extends BaseActivity {
         tableCode = getIntent().getStringExtra("TABLE_CODE");
 
         tvTableTitle.setText(tableName);
-        tvCode.setText(String.format("Código da tabela: %s", tableCode));
+        
+        if (tableCode == null || tableCode.equals("SEM-CODIGO")) {
+            FirebaseFirestore.getInstance().collection("pictogramTables").document(tableId)
+                    .get().addOnSuccessListener(doc -> {
+                        String freshCode = doc.getString("code");
+                        tvCode.setText(String.format("Código do Aluno: %s", freshCode));
+                    });
+        } else {
+            tvCode.setText(String.format("Código do Aluno: %s", tableCode));
+        }
 
         checkUserRole();
 
@@ -84,8 +93,8 @@ public class TableDetailsActivity extends BaseActivity {
                         String role = doc.getString("profile");
 
                         if ("professor".equals(role)) {
-                            btnAddByLink.setVisibility(View.GONE);
-                            btnPickImage.setVisibility(View.GONE);
+                            btnAddByLink.setVisibility(View.VISIBLE);
+                            btnPickImage.setVisibility(View.VISIBLE);
                             btnManageAccess.setVisibility(View.GONE);
                         }
                     }
@@ -108,7 +117,6 @@ public class TableDetailsActivity extends BaseActivity {
                 final int takeFlags = data.getFlags() & Intent.FLAG_GRANT_READ_URI_PERMISSION;
                 getContentResolver().takePersistableUriPermission(imageUri, takeFlags);
             } catch (Exception ignored) {
-                // Se não conseguir permissão persistente, ainda tentamos usar a imagem imediatamente.
             }
 
             Intent intent = new Intent(this, AddPictogramActivity.class);
